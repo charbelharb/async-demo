@@ -1,4 +1,6 @@
-﻿namespace SomeExternalLibrary;
+﻿using Microsoft.VisualBasic;
+
+namespace SomeExternalLibrary;
 
 public class Example : IExample
 {
@@ -73,6 +75,63 @@ public class Example : IExample
         {
             Thread.Sleep(input);
             return input;
+        }, cancellationToken);
+    }
+
+    public async Task<string> MultipleTasksAsync(int input, CancellationToken cancellationToken = default)
+    {
+        var firstTask = SomeMethodThatReturnAResult(input, cancellationToken);
+        var secondTask = SomeOtherMethodThatReturnAResult(input, cancellationToken);
+        
+        var result = await Task.WhenAll(firstTask, secondTask);
+        return Strings.Join(result, ", ") ?? string.Empty;
+        
+        // var whenAnyResult = await Task.WhenAny(firstTask, secondTask);
+        // var result = await whenAnyResult;
+        // return result;
+    }
+
+    private static async Task<string> SomeMethodThatReturnAResult(int input, CancellationToken cancellationToken = default)
+    {
+        return await Task.Run(() =>
+        {
+            Console.WriteLine("First Task Started");
+            int i;
+            for (i = 0; i < input; i++)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    Console.WriteLine("Operation Cancelled");
+                    break;
+                }
+
+                Console.WriteLine($"First Task iteration {i}");
+                Thread.Sleep(2000);
+            }
+
+            return $"First Task ended at iteration {i}";
+        }, cancellationToken);
+    }
+    
+    private static async Task<string> SomeOtherMethodThatReturnAResult(int input, CancellationToken cancellationToken = default)
+    {
+        return await Task.Run(() =>
+        {
+            Console.WriteLine("Second Task Started");
+            int i;
+            for (i = 0; i < input; i++)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    Console.WriteLine("Operation Cancelled");
+                    break;
+                }
+
+                Console.WriteLine($"Second Task iteration {i}");
+                Thread.Sleep(1000);
+            }
+
+            return $"Second Task ended at iteration {i}";
         }, cancellationToken);
     }
 }

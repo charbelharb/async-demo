@@ -25,6 +25,7 @@ public class SimpleExampleController : Controller
     /*
      * Cancellation token is used to stop the flow gracefully
      */
+    
     [HttpGet("do-stuff-async/{id:int}")]
     public async Task<IActionResult> DoStuffAsync(int id, CancellationToken cancellationToken = default)
     {
@@ -65,6 +66,14 @@ public class SimpleExampleController : Controller
     {
         Console.WriteLine("Blocking Async example called");
         var result = await _exampleLibrary.BlockExampleAsync(id,cancellationToken);
+        return Ok(result);
+    }
+    
+    [HttpGet("multiple/{id:int}")]
+    public async Task<ActionResult<int>> MultipleTasksAsync(int id, CancellationToken cancellationToken = default)
+    {
+        Console.WriteLine("MultipleTasksAsync example called");
+        var result = await _exampleLibrary.MultipleTasksAsync(id,cancellationToken);
         return Ok(result);
     }
 }

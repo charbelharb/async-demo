@@ -45,4 +45,12 @@ public interface IExample
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<int> BlockExampleAsync(int input, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Demonstrate multiple tasks
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<string> MultipleTasksAsync(int input, CancellationToken cancellationToken = default);
 }
