@@ -31,6 +31,9 @@ app.MapControllers();
 
 // NEVER DO THAT
 Console.WriteLine($"Max Processor {Environment.ProcessorCount}");
+ThreadPool.GetAvailableThreads(out var workerThreads, out var completionPortThreads);
+Console.WriteLine($"Worker threads {workerThreads}");
+Console.WriteLine($"Async I/O threads {completionPortThreads}");
 var max = ThreadPool.SetMaxThreads(Environment.ProcessorCount, Environment.ProcessorCount);
 Console.WriteLine(max);
 
