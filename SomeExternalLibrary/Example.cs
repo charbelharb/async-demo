@@ -75,7 +75,7 @@ public class Example : IExample
         {
             Thread.Sleep(input);
             return input;
-        }, cancellationToken);
+        }, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<string> MultipleTasksAsync(int input, CancellationToken cancellationToken = default)
@@ -83,7 +83,7 @@ public class Example : IExample
         var firstTask = SomeMethodThatReturnAResult(input, cancellationToken);
         var secondTask = SomeOtherMethodThatReturnAResult(input, cancellationToken);
         
-        var result = await Task.WhenAll(firstTask, secondTask);
+        var result = await Task.WhenAll(firstTask, secondTask).ConfigureAwait(false);
         return Strings.Join(result, ", ") ?? string.Empty;
         
         // var whenAnyResult = await Task.WhenAny(firstTask, secondTask);
@@ -110,7 +110,7 @@ public class Example : IExample
             }
 
             return $"First Task ended at iteration {i}";
-        }, cancellationToken);
+        }, cancellationToken).ConfigureAwait(false);
     }
     
     private static async Task<string> SomeOtherMethodThatReturnAResult(int input, CancellationToken cancellationToken = default)
@@ -132,6 +132,6 @@ public class Example : IExample
             }
 
             return $"Second Task ended at iteration {i}";
-        }, cancellationToken);
+        }, cancellationToken).ConfigureAwait(false);
     }
 }
